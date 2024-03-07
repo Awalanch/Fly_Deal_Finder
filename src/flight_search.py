@@ -1,13 +1,10 @@
 import requests
-from flight_data import FlightData
-import os
 
-TEQUILA_ENDPOINT = "https://tequila-api.kiwi.com"
-TEQUILA_API_KEY = os.getenv("TEQUILA_API_KEY")
+from flight_data import FlightData
+from settings.base import TEQUILA_API_KEY, TEQUILA_ENDPOINT
 
 
 class FlightSearch:
-
     def get_destination_code(self, city_name):
         location_endpoint = f"{TEQUILA_ENDPOINT}/locations/query"
         headers = {"apikey": TEQUILA_API_KEY}
@@ -28,7 +25,7 @@ class FlightSearch:
             "nights_in_dst_to": 28,
             "one_for_city": 1,
             "max_stopovers": 0,
-            "curr": "CZK"
+            "curr": "CZK",
         }
 
         response = requests.get(
@@ -50,9 +47,7 @@ class FlightSearch:
             destination_city=data["route"][0]["cityTo"],
             destination_airport=data["route"][0]["flyTo"],
             out_date=data["route"][0]["local_departure"].split("T")[0],
-            return_date=data["route"][1]["local_departure"].split("T")[0]
+            return_date=data["route"][1]["local_departure"].split("T")[0],
         )
         print(f"{flight_data.destination_city}: {flight_data.price} CZK")
         return flight_data
-
-
